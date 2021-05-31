@@ -1,0 +1,63 @@
+func parity(of a: Int) -> (Bool){
+    if (a%2 == 0) {
+        return true
+    } else { return false }
+}
+func del(_ a: Int) -> (Bool){
+    if (a%3 == 0) {
+        return true
+    } else { return false } 
+}
+
+func fib(_ n: Int, in array: inout [Int]) -> Int{
+    var value: Int = 1
+    if( n == 0 || n == 1) { return value }
+    if(array[n-1]==0 || array[n-2]==0){
+        fib(n-1,in: &array)
+    }
+    array[n] = array[n-1]+array[n-2]
+    value = array[n]
+    return value
+}
+
+var someArray: [Int] = []
+
+for i in 0...100{
+    someArray.append(i)
+}
+
+var newArray: [Int] = []
+for i in 1...100{
+    if(!(parity(of: someArray[i]))&&del(someArray[i])){
+        newArray.append(someArray[i])
+    }
+}
+print(newArray)
+print("\n")
+
+var fibArray: [Int] = []
+fibArray.append(1)
+fibArray.append(1)
+for i in 2...50{
+    fibArray.append(0)
+}
+fib(50, in: &fibArray)
+print(fibArray)
+
+let N = 1000
+var firstArray: [Int] = []
+var prostArray: [Int] = []
+for i in 0...N{
+    firstArray.append(i)
+}
+for i in 2...N{
+    if (firstArray[i] != 0 && prostArray.count < 100) {
+        prostArray.append(firstArray[i])
+        var j = i*i
+        while(j < N){
+            firstArray[j] = 0
+            j+=i
+        }
+    }
+}
+print(prostArray)
