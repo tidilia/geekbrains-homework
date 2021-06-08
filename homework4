@@ -123,3 +123,5 @@ print("\n")
 thirdcar.printCar()
 thirdcar.trunkFull = .full
 thirdcar.unload(cargo: .part)
+print(thirdcar.trunkFull.rawValue)
+
