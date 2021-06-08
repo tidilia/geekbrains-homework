@@ -1,0 +1,125 @@
+
+class Car {
+    var makeOf: brand
+    var year: Int
+    var enginePower: Int? = nil
+    var windows: carWindows = .close
+    init(makeOf: brand, year: Int){
+        self.makeOf = makeOf
+        self.year = year
+    }
+    enum brand{
+        case Mercedes
+        case BMW
+        case Chevrolet
+        case Lada
+        case Hyundai
+        case Kia
+    }
+    enum carWindows: String {
+        case open = "окна открыты"
+        case close = "окна закрыты"
+    }
+    func CloseWindows(){
+        if(self.windows == .close){
+            print("Окна уже закрыты")
+        }else {self.windows = .close}
+    }
+    func OpenWindows(){
+        if(self.windows == .open){
+            print("Окна уже открыты")
+        }else {self.windows = .open }
+    }
+    func printCar(){
+        print("Марка машины: \(makeOf). Год выпуска: \(year)")
+    }
+}
+class SportCar: Car {
+    var color: carColor 
+    let model: String
+    var raceTime: Double
+    
+    init(makeOf: brand, year: Int, model: String, raceTime: Double, color: carColor){
+        self.model = model
+        self.raceTime = raceTime
+        self.color = color
+        super.init(makeOf: makeOf , year: year)
+    }
+    enum carColor: String{
+        case red = "красный"
+        case blue = "синий"
+        case black = "черный"
+        case green = "зеленый"
+        case white = "белый"
+        case yellow = "желтый"
+    }
+    
+    override func printCar(){
+        print("Марка машины: \(makeOf). Год выпуска: \(year). Модель: \(model). Разгон до 100 км/ч за: \(raceTime). Цвет машины: \(color)")
+    }
+}
+
+class TrunkCar: Car {
+    var trunkVolume: Int?
+    var trunkFull: carTrunk = .empty
+    init(makeOf: Car.brand, year: Int, trunkVolume: Int){
+        self.trunkVolume = trunkVolume
+        super.init(makeOf: makeOf, year: year)
+    }
+    override init(makeOf: brand, year: Int){
+        super.init(makeOf: makeOf, year: <#T##Int#>)
+    }
+    enum trunkUnload{
+        case full
+        case part
+    }
+    enum carTrunk: String{
+        case full = "Багажник полностью заполнен" 
+        case middle = "Багажник почти заполнен"
+        case empty = "Багажник пустой"
+    }
+    
+    override func printCar() {
+        if var vol = trunkVolume{
+            print("Марка машины: \(makeOf). Год выпуска: \(year). Объем багажника: \(trunkVolume!)")
+        }
+        
+    }
+    func unload(cargo: trunkUnload){
+        if(self.trunkFull == .empty){
+            print("Ошибка. Багажник пуст.")
+        }
+        if(cargo == .full && self.trunkFull != .empty){
+            self.trunkFull = .empty
+            print("Багажник полностью разгружен")
+        }
+        if(cargo == .part && self.trunkFull != .empty){
+            switch self.trunkFull{
+            case .full:
+                self.trunkFull = .middle
+                print("Багажник разгружен наполовину")
+            case .middle:
+                self.trunkFull = .empty
+                print("Багажник полностью разгружен")
+            case .empty: break
+            }
+        }
+    }
+}
+
+var firstcar = SportCar(makeOf: .Mercedes, year: 2020, model: "AMG GT S", raceTime: 3.6, color: .red)
+var secondcar = Car(makeOf: .Hyundai, year: 2015)
+var thirdcar = TrunkCar(makeOf: .Kia, year: 2019, trunkVolume: 705)
+
+firstcar.printCar()
+print(firstcar.windows.rawValue)
+firstcar.OpenWindows()
+print(firstcar.windows.rawValue)
+print("\n")
+
+secondcar.printCar()
+print("\n")
+
+thirdcar.printCar()
+thirdcar.trunkFull = .full
+thirdcar.unload(cargo: .part)
