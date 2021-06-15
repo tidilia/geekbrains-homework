@@ -1,0 +1,61 @@
+struct queue<Type: Comparable>{
+    var elements: [Type] = []
+    mutating func push(_ element: Type){
+        elements.append(element)
+    }
+    mutating func pop() -> Type? {
+        return elements.removeFirst()
+    }
+    func filter(array: queue<Type>, predicate: (Type) -> Bool) -> queue<Type> {
+        var tmpArray = queue<Type>()
+        for element in array.elements {
+            if predicate(element){
+                tmpArray.elements.append(element)
+            }
+        }
+        return tmpArray
+    }
+    subscript(indices: Int) -> Type?{
+        if (elements[indices] != nil) {return elements[indices]
+        }else {return nil} 
+    }
+}
+
+class people: Comparable{
+    var age: Int
+    var name: String
+    init(_ name: String, _ age: Int){
+        self.name = name
+        self.age = age
+    }
+    static func == (_ a: people, _ b: people) -> Bool{
+        if (a.age == b.age) {return true}
+        else {return false}
+    }
+    static func > (_ a: people, _ b: people) -> Bool{
+        if (a.age > b.age) {return true}
+        else {return false}
+    }
+    static func < (_ a: people, _ b: people) -> Bool{
+        if (a.age < b.age) {return true}
+        else {return false}
+    }
+}
+
+extension people: CustomStringConvertible{
+    var description: String  {return "Имя: \(name). Возраст: \(age)"}
+}
+
+let even: (people) -> Bool = { (element: people) -> Bool in
+    return element > people("", 20)
+}
+
+var queuePeople = queue<people>()
+var array: [people] = [people("Sergey", 23), people("Amina", 19), people("Timur", 21), people("Julia", 25)]
+for element in array {
+    queuePeople.push(element)
+}
+print(queuePeople.elements)
+queuePeople = queuePeople.filter(array: queuePeople, predicate: even)
+print(queuePeople.elements)
+print(queuePeople[1])
