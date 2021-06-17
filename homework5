@@ -1,0 +1,64 @@
+enum Engine: String {
+    case started = "машина заведена"
+    case notStarted = "машина не заведена"
+}
+protocol Car{
+    var brand: String {get}
+    var year: Int {get}
+    var engine: Engine {get set}
+    func printCar() -> ()
+}
+extension Car {
+    mutating func startEngine(){
+        if engine == .started {
+            engine = .notStarted
+        }else {
+            engine = .started
+        }
+    }
+}
+
+class CarClass: Car {
+    var brand: String = ""
+    var year: Int = 0
+    var engine: Engine  = .notStarted
+    
+    init(brand: String, year: Int){
+        self.brand = brand
+        self.year = year
+    }
+    
+    func printCar() -> (){
+        print("Машина фирмы \(brand). \(year) года выпуска.")
+    }
+}
+class sportCar: CarClass {
+    var enginePower: Int? = nil
+}
+
+class trunkCar: CarClass {
+    var trunkVolume: Double? = nil
+}
+
+extension sportCar: CustomStringConvertible{
+    var description: String {
+        return (enginePower == nil ? "Машина фирмы \(brand). \(year) года выпуска." : "Машина фирмы \(brand). \(year) года выпуска. Мощность двигателя: \(enginePower!) лошадиных сил.")
+    }
+}
+extension trunkCar: CustomStringConvertible{
+    var description: String {
+        return (trunkVolume == nil ? "Машина фирмы \(brand). \(year) года выпуска." : "Машина фирмы \(brand). \(year) года выпуска. Объем кузова: \(trunkVolume!).")
+    }
+}
+
+var firstcar = sportCar(brand: "Lamborghini", year: 2020)
+var secondcar = trunkCar(brand: "Scania", year: 2019)
+
+print(firstcar)
+print(secondcar)
+
+secondcar.trunkVolume = 45.6
+firstcar.enginePower = 610
+
+print(firstcar)
+print(secondcar)

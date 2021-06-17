@@ -1,0 +1,58 @@
+struct Car{
+    var enginePower: Int
+    var model: Brand
+    var price: Int
+    var count: Int 
+}
+
+struct Brand {
+    let name: String
+}
+
+enum rentCarError: Error {
+    case invalidSelection
+    case outOfStock
+    case insufficientFunds(moneyNeeded: Int)
+}
+
+
+class rentCars {
+    var carsInStock = [
+        "lamboHuracan": Car(enginePower: 610, model: Brand(name: "lamboHuracan"), price: 1100, count: 3),
+        "laferrari": Car(enginePower: 800, model: Brand(name: "laferrari"), price: 1700, count: 2),
+        "nissanGTR": Car(enginePower: 600, model: Brand(name: "nissanGTR"), price: 1050, count: 4),
+        "mercAMGGT": Car(enginePower: 537, model: Brand(name: "mercAMGGT"), price: 1000, count: 5)
+    ]
+    var moneyDeposited = 0
+    func rent(CarModel name: String) throws  -> Brand{
+        guard let item = carsInStock[name] else {
+            throw rentCarError.invalidSelection
+        }
+        guard item.count > 0  else {
+            throw rentCarError.outOfStock
+        }
+        guard item.price <= moneyDeposited else {
+            throw rentCarError.insufficientFunds(moneyNeeded: item.price - moneyDeposited)
+        }
+        moneyDeposited -= item.price
+        var newItem = item
+        newItem.count -= 1
+        carsInStock[name] = newItem
+        print("Dispencing \(name)")
+        return newItem.model
+    }
+    }
+
+
+
+do{
+    let sell1 = try? rentCars().rent(CarModel: "onecar")
+} catch rentCarError.invalidSelection{
+    print("Неправильно введена модель машины")
+} catch rentCarError.insufficientFunds(let neededValue){
+    print("Введенная сумма недостаточна. Необходимо еще \(neededValue) долларов")
+} catch rentCarError.outOfStock {
+    print("Такой машины нет в наличии")
+}
+
+let sell2 = try? rentCars().rent(CarModel: "lamboHuracan")
